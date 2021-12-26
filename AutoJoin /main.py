@@ -1,6 +1,7 @@
 #!/user/bin/evn python
 import re
-from time import sleep, strptime
+from time import sleep, strptime, time
+import time
 import datetime
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
@@ -344,7 +345,7 @@ class LMS:
                     message (str): The text of the message that the user intends to record.
         """
         comment_element = self.driver.find_element_by_id("chatTypingArea")
-        comment_element.send_keys(message)
+        # comment_element.send_keys(message)
         logging.info(f"You comment ----> '{message}'")
         # comment_element.submit()
 
@@ -387,8 +388,10 @@ class LMS:
 
 
 if __name__ == '__main__':
+    counter = 0
     while True:
         try:
+            time1 = time.time()
             lms = LMS(username = conf['username'],
                       password = conf['password'],
                       login_url=conf['login_url'],
@@ -396,9 +399,17 @@ if __name__ == '__main__':
                       based_simulation_student=conf['based_simulation_student'])
 
             lms.management()
+
         except:
+            time2 = time.time()
+            print("time2 = ",time2)
+            print("time2 = ", time1)
+            print("res = ", time2-time1)
+            if time2-time1 < 4:
+                counter += 1
+                print("counter = ", counter)
+            if counter > 10 :
+                break
             continue
         else:
             break
-
-
